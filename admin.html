@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Login Page</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #6c63ff, #f5a623, #00d2ff, #ff77a9);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background gradient */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Optional: Add floating shapes for extra flair */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 200px;
+            height: 200px;
+            background: #ff77a9;
+            top: -50px;
+            left: -50px;
+        }
+
+        .shape2 {
+            width: 300px;
+            height: 300px;
+            background: #00d2ff;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        /* Login container styles */
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 350px;
+            animation: fadeIn 1s ease forwards;
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #6c63ff;
+            font-size: 2em;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: #f5a623;
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #6c63ff;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 1em;
+        }
+
+        .form-group input:focus {
+            border-color: #f5a623;
+            box-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+        }
+
+        .login-btn {
+            width: 100%;
+            background-color: #6c63ff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #4c47e0;
+        }
+
+        .login-btn:hover::after {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Shake animation for invalid credentials */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .login-container {
+                width: 90%;
+                padding: 40px 20px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Optional: Floating Shapes for Enhanced Visuals -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+
+    <div class="login-container" id="login-container">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="username">User ID</label>
+            <input type="text" id="username" placeholder="Enter your User ID">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your Password">
+        </div>
+        <button class="login-btn" onclick="login()">Login</button>
+    </div>
+
+    <script>
+        // Sample JSON for users and teams
+        const users = [
+            { id: "sabi", password: "sabi123", role: "admin" },
+            { id: "team1", password: "team1pass", role: "team1" },
+            { id: "team2", password: "team2pass", role: "team2" },
+            { id: "team3", password: "team3pass", role: "team3" },
+            { id: "team4", password: "team4pass", role: "team4" }
+        ];
+
+        function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const loginContainer = document.getElementById("login-container");
+
+            const user = users.find(user => user.id === username && user.password === password);
+
+            if (user) {
+                // Remove any existing shake class
+                loginContainer.classList.remove("shake");
+
+                // Redirect based on role
+                switch (user.role) {
+                    case "admin":
+                        alert("Welcome Admin!");
+                        window.location.href = "admin_dashboard.html"; // Admin dashboard
+                        break;
+                    case "team1":
+                        alert("Welcome Team 1 Leader!");
+                        window.location.href = "team1_dashboard.html"; // Team 1 dashboard
+                        break;
+                    case "team2":
+                        alert("Welcome Team 2 Leader!");
+                        window.location.href = "team2_dashboard.html"; // Team 2 dashboard
+                        break;
+                    case "team3":
+                        alert("Welcome Team 3 Leader!");
+                        window.location.href = "team3_dashboard.html"; // Team 3 dashboard
+                        break;
+                    case "team4":
+                        alert("Welcome Team 4 Leader!");
+                        window.location.href = "team4_dashboard.html"; // Team 4 dashboard
+                        break;
+                    default:
+                        alert("Role not recognized.");
+                }
+            } else {
+                // Add shake animation on invalid login
+                loginContainer.classList.add("shake");
+                setTimeout(() => {
+                    loginContainer.classList.remove("shake");
+                }, 500);
+                alert("Invalid credentials. Please try again.");
+            }
+        }
+
+        // Optional: Allow form submission with Enter key
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>

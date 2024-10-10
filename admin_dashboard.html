@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .dashboard-header {
+            background-color: #283593;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            width: 100%;
+        }
+        .admin-info {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .team-grid {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .team-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            width: 230px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            background-color: #e8eaf6;
+        }
+        .team-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #283593;
+        }
+        .team-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .team-details, .task-management, .leave-management {
+            display: none;
+            background-color: #fff;
+            padding: 25px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+        .team-details h2, .task-management h3, .leave-management h3 {
+            margin-bottom: 15px;
+            color: #283593;
+        }
+        .team-details ul {
+            list-style: none;
+            padding: 0;
+        }
+        .team-details ul li {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .chart-container {
+            width: 250px;  /* Adjusted chart width */
+            margin: 25px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .task-calendar, .task-history, .leave-calendar {
+            margin-top: 20px;
+        }
+        .task-calendar input[type="text"], .task-calendar input[type="date"], 
+        .task-calendar select, .leave-calendar select {
+            margin-right: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 150px; /* Adjusted width */
+        }
+        .task-calendar button, .leave-calendar button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            margin-left: 10px; /* Spacing between input and button */
+        }
+        .task-calendar button:hover, .leave-calendar button:hover {
+            background-color: #45a049;
+        }
+        .ongoing-tasks, .completed-tasks {
+            margin-top: 20px;
+        }
+        .task-section, .leave-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center align items vertically */
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .task-name, .leave-name {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #2c2c2c; /* Darker color for better visibility */
+        }
+        .task-buttons, .leave-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .task-buttons button, .leave-buttons button {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .task-buttons button:first-child, .leave-buttons button:first-child {
+            background-color: #4caf50; /* Complete button color */
+            color: white;
+        }
+        .task-buttons button:last-child, .leave-buttons button:last-child {
+            background-color: #f44336; /* Remove button color */
+            color: white;
+        }
+        .task-buttons button:hover, .leave-buttons button:hover {
+            opacity: 0.8; /* Hover effect */
+        }
+        /* New styles for responsiveness */
+        @media (max-width: 768px) {
+            .team-card {
+                width: 90%;
+            }
+            .team-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .task-calendar input[type="text"], .task-calendar input[type="date"], 
+            .task-calendar select, .leave-calendar select {
+                width: 100%; /* Full width on smaller screens */
+                margin-right: 0; /* Remove right margin */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Admin Dashboard Header -->
+<div class="dashboard-header">
+    <h1>Welcome Admin</h1>
+    <div class="admin-info">
+        <p><i class="fas fa-user"></i> Admin Name: Sabi</p>
+        <p><i class="fas fa-envelope"></i> Email: sabi@gmail.com</p>
+    </div>
+</div>
+
+<!-- Team Cards Section -->
+<div class="team-grid">
+    <div class="team-card" onclick="showTeamDetails('team1')">
+        <h3>Team 1: Development</h3>
+        <p>Leader: John Doe</p>
+    </div>
+    <div class="team-card" onclick="showTeamDetails('team2')">
+        <h3>Team 2: Design</h3>
+        <p>Leader: Jane Smith</p>
+    </div>
+    <div class="team-card" onclick="showTeamDetails('team3')">
+        <h3>Team 3: Marketing</h3>
+        <p>Leader: Jim Beam</p>
+    </div>
+    <div class="team-card" onclick="showTeamDetails('team4')">
+        <h3>Team 4: Sales</h3>
+        <p>Leader: Dave White</p>
+    </div>
+</div>
+
+<!-- Team Details Section -->
+<div id="teamDetails" class="team-details">
+    <h2 id="teamName"></h2>
+    <p><b>Leader:</b> <span id="teamLeader"></span></p>
+    <p><b>Project:</b> <span id="teamProject"></span></p>
+    <h3>Team Members:</h3>
+    <ul id="teamMembers"></ul>
+
+    <!-- Team Progress Pie Chart -->
+    <div class="chart-container">
+        <canvas id="teamProgressChart" width="250" height="250"></canvas> <!-- Adjusted height -->
+    </div>
+</div>
+
+<!-- Task Management Section -->
+<div class="task-management" id="taskManagement">
+    <h3>Task Management</h3>
+
+    <!-- Task Assignment Section -->
+    <div class="task-calendar">
+        <input type="text" id="taskName" placeholder="Task Name" required>
+        <input type="date" id="taskDate" required>
+        <div class="team-selection">
+            <label for="teamSelect">Assign Task to Team:</label>
+            <select id="teamSelect">
+                <option value="team1">Team 1: Development</option>
+                <option value="team2">Team 2: Design</option>
+                <option value="team3">Team 3: Marketing</option>
+                <option value="team4">Team 4: Sales</option>
+            </select>
+        </div>
+        <button onclick="assignTask()">Assign Task</button>
+    </div>
+
+    <!-- Ongoing Tasks Section -->
+    <h3>Ongoing Tasks</h3>
+    <div id="ongoingTasks" class="ongoing-tasks"></div>
+
+    <!-- Completed Tasks Section -->
+    <h3>Completed Tasks</h3>
+    <div id="completedTasks" class="completed-tasks"></div>
+</div>
+
+<!-- Leave Management Section -->
+<div class="leave-management" id="leaveManagement">
+    <h3>Leave Management</h3>
+
+    <!-- Leave Assignment Section -->
+    <div class="leave-calendar">
+        <label for="leaveType">Select Leave Type:</label>
+        <select id="leaveType">
+            <option value="sick">Sick Leave</option>
+            <option value="paid">Paid Leave</option>
+            <option value="unpaid">Unpaid Leave</option>
+        </select>
+        <div class="team-selection">
+            <label for="leaveTeamSelect">Select Team:</label>
+            <select id="leaveTeamSelect">
+                <option value="team1">Team 1: Development</option>
+                <option value="team2">Team 2: Design</option>
+                <option value="team3">Team 3: Marketing</option>
+                <option value="team4">Team 4: Sales</option>
+            </select>
+        </div>
+        <input type="text" id="leaveDate" placeholder="Leave Date (YYYY-MM-DD)" required>
+        <button onclick="applyLeave()">Apply Leave</button>
+    </div>
+
+    <!-- Leave Display Section -->
+    <h3>Applied Leaves</h3>
+    <div id="appliedLeaves" class="applied-leaves"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let chartInstance; // Variable to hold chart instance
+
+    // Team Data Structure
+    const teams = {
+        team1: {
+            name: 'Team 1: Development',
+            leader: 'John Doe',
+            project: 'Project A',
+            members: ['Alice', 'Bob', 'Charlie'],
+            progress: { completed: 70, remaining: 30 },
+            ongoingTasks: [],
+            completedTasks: [],
+            appliedLeaves: [] // Track leaves for the team
+        },
+        team2: {
+            name: 'Team 2: Design',
+            leader: 'Jane Smith',
+            project: 'Project B',
+            members: ['David', 'Eva', 'Frank'],
+            progress: { completed: 60, remaining: 40 },
+            ongoingTasks: [],
+            completedTasks: [],
+            appliedLeaves: []
+        },
+        team3: {
+            name: 'Team 3: Marketing',
+            leader: 'Jim Beam',
+            project: 'Project C',
+            members: ['George', 'Helen', 'Ian'],
+            progress: { completed: 50, remaining: 50 },
+            ongoingTasks: [],
+            completedTasks: [],
+            appliedLeaves: []
+        },
+        team4: {
+            name: 'Team 4: Sales',
+            leader: 'Dave White',
+            project: 'Project D',
+            members: ['Mona', 'Nina', 'Oscar', 'Paul'],
+            progress: { completed: 80, remaining: 20 },
+            ongoingTasks: [],
+            completedTasks: [],
+            appliedLeaves: []
+        }
+    };
+
+    // Function to Show Team Details
+    function showTeamDetails(teamId) {
+        const team = teams[teamId];
+        document.getElementById('teamName').innerText = team.name;
+        document.getElementById('teamLeader').innerText = team.leader;
+        document.getElementById('teamProject').innerText = team.project;
+        document.getElementById('teamMembers').innerHTML = team.members.map(member => `<li>${member}</li>`).join('');
+
+        // Clear existing chart if any
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        // Create Pie Chart
+        const ctx = document.getElementById('teamProgressChart').getContext('2d');
+        const progressData = team.progress;
+
+        chartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    label: 'Team Progress',
+                    data: [progressData.completed, progressData.remaining],
+                    backgroundColor: ['#4caf50', '#f44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+            }
+        });
+
+        // Show the team details and task management
+        document.getElementById('teamDetails').style.display = 'block';
+        document.getElementById('taskManagement').style.display = 'block';
+        document.getElementById('leaveManagement').style.display = 'block'; // Show leave management section
+        updateTaskDisplays(teamId); // Update ongoing and completed tasks display
+        updateLeaveDisplays(teamId); // Update applied leaves display
+    }
+
+    // Function to Assign Task
+    function assignTask() {
+        const taskName = document.getElementById('taskName').value;
+        const taskDate = document.getElementById('taskDate').value;
+        const teamSelect = document.getElementById('teamSelect').value;
+
+        if (taskName && taskDate) {
+            const task = { name: taskName, date: taskDate };
+            teams[teamSelect].ongoingTasks.push(task); // Add to ongoing tasks
+            document.getElementById('taskName').value = ''; // Clear the task input
+            document.getElementById('taskDate').value = ''; // Clear the date input
+            updateTaskDisplays(teamSelect); // Refresh displayed tasks
+        } else {
+            alert("Please enter task name and select a date.");
+        }
+    }
+
+    // Function to Update Task Displays
+    function updateTaskDisplays(teamId) {
+        const ongoingTasksDiv = document.getElementById('ongoingTasks');
+        const completedTasksDiv = document.getElementById('completedTasks');
+
+        ongoingTasksDiv.innerHTML = ''; // Clear ongoing tasks display
+        completedTasksDiv.innerHTML = ''; // Clear completed tasks display
+
+        // Display Ongoing Tasks
+        teams[teamId].ongoingTasks.forEach(task => {
+            ongoingTasksDiv.innerHTML += `
+                <div class="task-section">
+                    <span class="task-name">${task.name} - ${task.date}</span>
+                    <div class="task-buttons">
+                        <button onclick="markTaskCompleted('${teamId}', '${task.name}')">Complete</button>
+                        <button onclick="removeTask('${teamId}', '${task.name}', 'ongoing')">Remove</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Display Completed Tasks
+        teams[teamId].completedTasks.forEach(task => {
+            completedTasksDiv.innerHTML += `
+                <div class="task-section">
+                    <span class="task-name">${task.name} - ${task.date}</span>
+                    <button onclick="removeTask('${teamId}', '${task.name}', 'completed')">Remove</button>
+                </div>
+            `;
+        });
+    }
+
+    // Function to Mark Task as Completed
+    function markTaskCompleted(teamId, taskName) {
+        const ongoingTasks = teams[teamId].ongoingTasks;
+        const completedTasks = teams[teamId].completedTasks;
+        const taskIndex = ongoingTasks.findIndex(task => task.name === taskName);
+
+        if (taskIndex !== -1) {
+            completedTasks.push(ongoingTasks[taskIndex]); // Move to completed tasks
+            ongoingTasks.splice(taskIndex, 1); // Remove from ongoing tasks
+            updateTaskDisplays(teamId); // Refresh displayed tasks
+        }
+    }
+
+    // Function to Remove Task
+    function removeTask(teamId, taskName, type) {
+        if (type === 'ongoing') {
+            teams[teamId].ongoingTasks = teams[teamId].ongoingTasks.filter(task => task.name !== taskName);
+        } else {
+            teams[teamId].completedTasks = teams[teamId].completedTasks.filter(task => task.name !== taskName);
+        }
+        updateTaskDisplays(teamId); // Refresh displayed tasks
+    }
+
+    // Function to Apply Leave
+    function applyLeave() {
+        const leaveType = document.getElementById('leaveType').value;
+        const leaveTeamSelect = document.getElementById('leaveTeamSelect').value;
+        const leaveDate = document.getElementById('leaveDate').value;
+
+        if (leaveDate) {
+            const leave = { type: leaveType, date: leaveDate };
+            teams[leaveTeamSelect].appliedLeaves.push(leave); // Add to applied leaves
+            document.getElementById('leaveDate').value = ''; // Clear the leave date input
+            updateLeaveDisplays(leaveTeamSelect); // Refresh displayed leaves
+        } else {
+            alert("Please enter a valid date.");
+        }
+    }
+
+    // Function to Update Leave Displays
+    function updateLeaveDisplays(teamId) {
+        const appliedLeavesDiv = document.getElementById('appliedLeaves');
+        appliedLeavesDiv.innerHTML = ''; // Clear applied leaves display
+
+        // Display Applied Leaves
+        teams[teamId].appliedLeaves.forEach(leave => {
+            appliedLeavesDiv.innerHTML += `
+                <div class="leave-section">
+                    <span class="leave-name">${leave.type} - ${leave.date}</span>
+                </div>
+            `;
+        });
+    }
+</script>
+
+</body>
+</html>
